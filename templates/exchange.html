@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>kalkulator walutowy</title>
+    <link href="{{url_for('static', filename='styles.css')}}" rel="stylesheet">
+</head>
+<body>
+<div class="board"><h1>Kalkulator wymiany walut</h1></div>
+<div class="parent">
+    <div class="child1">
+        <table>
+            <tr>
+                <th>nazwa</th>
+                <th>para walutowa</th>
+                <th>kurs sprzedaży</th>
+                <th>kurs kupna</th>
+            </tr>
+            {% for item in items %}
+            <tr>
+                <td>{{item['currency']}}</td>
+                <td>{{item['code']}} / PLN</td>
+                <td>{{item['ask']}} PLN</td>
+                <td>{{item['bid']}} PLN</td>
+            </tr>
+            {% endfor %}
+
+            
+        </table>
+    </div>
+    <div class="child2">
+        <div class="grandson1">
+        	<form action="" method="POST">
+                <label for="code">Wybierz walutę:</label>
+                <select name="code" id="code">
+                    <option value=""></option>
+                    {% for item in items %}
+                    <option value="{{item['code']}}">{{item['code']}}</option>
+                    {% endfor %}
+                </select><br><br>
+                <label>Rodzaj operacji</label><br>
+                <label>
+                    <input type="radio" name="operation" value="bid">kupno
+                </label>
+                <label>
+                    <input type="radio" name="operation" value="ask">sprzedaż
+                </label>
+                <br><br>
+                <label>kwota</label><br>
+                <label>
+                    <input class="amount" type="text" name="amount" placeholder="wpisz kwotę">
+		        </label>
+                <br><br>
+                <input type="submit" value="Przelicz">
+		    </form>
+        </div>
+        <div class="grandson2">
+            {% if operation == 'ask' %}
+            <h2>
+                {{amount}} {{code}}
+                =
+                {{score}} PLN
+            </h2>
+            <p>1 {{code}} = {{ask}} PLN, według kursu NBP z dnia {{date}}</p>
+            {% endif %}
+            {% if operation == 'bid' %}
+            <h2>
+                {{amount}} PLN
+                =
+                {{score}} {{code}}
+            </h2>
+            <p>1 {{code}} = {{bid}} PLN, według kursu NBP z dnia {{date}}</p>
+            {% endif %}
+            {% if operation == 'notNumber' %}
+            <h4><i>"{{amount}}"</i> nie jest liczbą, spróbuj jeszcze raz.</h4>
+            {% endif %}
+            {% if operation == 'noValue' %}
+            <h4>Coś poszło nie tak. Stać Cię na więcej.<br>Przyłóż się i wypełnij ten formularz jak należy!!!</h4>
+            {% endif %}
+            {% if operation != 'noValue' and operation != 'notNumber' and operation != 'bid' and operation != 'ask'  %}
+            <p><b>Kupno</b>
+            <ol>
+            <li>Wybierz walutę, na którą chcesz wymienić.</li>
+            <li>Nastaw rodzaj operacji na <i>kupno</i>.</li>
+            <li>Podaj kwotę w PLN, którą chcesz wymienić.</li>
+            </ol>
+            </p>
+            <p><b>Sprzedaż</b>
+            <ol>
+            <li>Wybierz walutę, którą chcesz sprzedać.</li>
+            <li>Nastaw rodzaj operacji na <i>sprzedaż</i>.</li>
+            <li>Podaj kwotę w walucie, którą chcesz wymienić.</li>
+            </ol>
+            </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>

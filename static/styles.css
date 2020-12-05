@@ -1,0 +1,61 @@
+body{
+    background-color: #DDA0DD;
+    font-family: Time new roman;
+}
+
+.board{
+    text-align: center;
+}
+form{
+    width: 400px; 
+}
+input{
+    background-color: #E6E6FA;
+    margin: 10px
+}
+.amount{
+    width: 90%; 
+    height: 30px;
+}
+th{
+    font-size: 13px;
+}
+th, td{
+    border-collapse: collapse;
+    border-bottom: 1px solid;
+    text-align: left;  
+    padding: 6px;  
+}
+h2{
+    text-align: center;
+}
+p{
+    text-align: center;
+    font-size: 15px;
+}
+td{
+    font-style: oblique;
+}
+.parent{
+    display: flex;
+    justify-content: flex-start;
+}
+.child1{
+    border-radius: 10px;
+    background-color: #E6E6FA;
+    margin: 5px;
+    padding: 10px;
+}
+.child2{
+    margin: 5px;
+    padding: 5px;
+}
+.grandson1{
+    border-bottom:  dashed 2px green;
+    margin: 10px;
+    padding: 10px;
+}
+.grandson2{
+    margin: 10px;
+    padding: 10px;
+}
