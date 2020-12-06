@@ -2,6 +2,8 @@ from flask import Flask, render_template, request
 import requests
 import csv
 from typing import Dict
+import pickle
+
 
 # creating a Currency class
 class Currency:
@@ -40,6 +42,17 @@ forint = Currency(
     bid=exchange[4]['bid'],
     ask=exchange[4]['ask']
 )
+
+# pickling lists with instances of Currency clacy
+lista = [euro, dolar, forint]
+with open("exchange_rate.pickle", 'wb') as exchange_rate_pickle:
+    pickle.dump(lista, exchange_rate_pickle)
+with open("exchange_rate.pickle", 'rb') as exchange_rate_pickle:
+    lista2 = pickle.load(exchange_rate_pickle)
+
+print(lista)
+print(lista2)
+print(lista2[1])
 
 # saving data to csv file
 with open('exchange_rate.csv', 'w') as exchange_rate_csv:
