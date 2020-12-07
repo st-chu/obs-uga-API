@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 import requests
 import csv
-from typing import Dict
+from typing import Dict, Union
 import pickle
 
 
@@ -50,9 +50,6 @@ with open("exchange_rate.pickle", 'wb') as exchange_rate_pickle:
 with open("exchange_rate.pickle", 'rb') as exchange_rate_pickle:
     lista2 = pickle.load(exchange_rate_pickle)
 
-print(lista)
-print(lista2)
-print(lista2[1])
 
 # saving data to csv file
 with open('exchange_rate.csv', 'w') as exchange_rate_csv:
@@ -67,19 +64,13 @@ for item in exchange:
     item['ask'] = round(item['ask'], 4)
     item['bid'] = round(item['bid'], 4)
 
+exchange_dic = {}
+for item in exchange:
+    exchange_dic.setdefault(item['code'], {'bid': item['bid'], 'ask': item['ask'], 'currency': item['currency']})
 
-def multiplier(items: Dict, operation: str, code: str) -> float:
-    """
-    A function that searches for the value of the operation variable for the given code.
-    :param items: Dict
-    :param operation: str
-    :param code: str
-    :return: float
-    """
-    for _item in items:
-        if _item['code'] == code:
-            value = _item[operation]
-            return value
+
+def multiplier(items: Dict[str, Dict[str, Union[str, float]]], operation: str, code: str) -> float:
+    return items.get(code).get(operation)
 
 
 app = Flask(__name__)
@@ -110,7 +101,7 @@ def hello():
             operation = 'noValue'
             return render_template('exchange.html', items=exchange, operation=operation)
         if operation == 'bid':
-            bid = multiplier(exchange, operation, code)
+            bid = multiplier(exchange_dic, operation, code)
             score = round(amount / bid, 2)
             score_str = '{:.2f}'.format(score)
             amount_str = '{:.2f}'.format(amount)
