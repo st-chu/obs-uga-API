@@ -23,33 +23,25 @@ data = response.json()
 date = data[0]['effectiveDate']
 exchange = data[0]['rates']
 
+for item in exchange:
+    item['ask'] = round(item['ask'], 4)
+    item['bid'] = round(item['bid'], 4)
+
 # creating an instance of the Currency class
-dolar = Currency(
-    currency=exchange[0]['currency'],
-    code=exchange[0]['code'],
-    bid=exchange[0]['bid'],
-    ask=exchange[0]['ask']
-)
-euro = Currency(
-    currency=exchange[3]['currency'],
-    code=exchange[3]['code'],
-    bid=exchange[3]['bid'],
-    ask=exchange[3]['ask']
-)
-forint = Currency(
-    currency=exchange[4]['currency'],
-    code=exchange[4]['code'],
-    bid=exchange[4]['bid'],
-    ask=exchange[4]['ask']
-)
+currency_list = []
+for item in exchange:
+    currency_list.append(Currency(
+        currency=item['currency'],
+        code=item['code'],
+        bid=item['bid'],
+        ask=item['ask']
+    ))
 
 # pickling lists with instances of Currency clacy
-lista = [euro, dolar, forint]
 with open("exchange_rate.pickle", 'wb') as exchange_rate_pickle:
-    pickle.dump(lista, exchange_rate_pickle)
+    pickle.dump(currency_list, exchange_rate_pickle)
 with open("exchange_rate.pickle", 'rb') as exchange_rate_pickle:
-    lista2 = pickle.load(exchange_rate_pickle)
-
+    currency_list_2 = pickle.load(exchange_rate_pickle)
 
 # saving data to csv file
 with open('exchange_rate.csv', 'w') as exchange_rate_csv:
@@ -69,7 +61,15 @@ for item in exchange:
     exchange_dic.setdefault(item['code'], {'bid': item['bid'], 'ask': item['ask'], 'currency': item['currency']})
 
 
+exchange_dic = {}
+for item in exchange:
+    exchange_dic.setdefault(item['code'], {'bid': item['bid'], 'ask': item['ask'], 'currency': item['currency']})
+
+
 def multiplier(items: Dict[str, Dict[str, Union[str, float]]], operation: str, code: str) -> float:
+    """
+    A function that searches for the value of the operation variable for the given code.
+    """
     return items.get(code).get(operation)
 
 
