@@ -56,14 +56,7 @@ for item in exchange:
     item['ask'] = round(item['ask'], 4)
     item['bid'] = round(item['bid'], 4)
 
-exchange_dic = {}
-for item in exchange:
-    exchange_dic.setdefault(item['code'], {'bid': item['bid'], 'ask': item['ask'], 'currency': item['currency']})
-
-
-exchange_dic = {}
-for item in exchange:
-    exchange_dic.setdefault(item['code'], {'bid': item['bid'], 'ask': item['ask'], 'currency': item['currency']})
+exchange_map = {item['code']: item for item in exchange}
 
 
 def multiplier(items: Dict[str, Dict[str, Union[str, float]]], operation: str, code: str) -> float:
@@ -101,7 +94,7 @@ def hello():
             operation = 'noValue'
             return render_template('exchange.html', items=exchange, operation=operation)
         if operation == 'bid':
-            bid = multiplier(exchange_dic, operation, code)
+            bid = multiplier(exchange_map, operation, code)
             score = round(amount / bid, 2)
             score_str = '{:.2f}'.format(score)
             amount_str = '{:.2f}'.format(amount)
@@ -120,7 +113,7 @@ def hello():
                 bid=bid_str
             )
         elif operation == 'ask':
-            ask = multiplier(exchange, operation, code)
+            ask = multiplier(exchange_map, operation, code)
             score = round(amount * ask, 2)
             score_str = '{:.2f}'.format(score)
             amount_str = '{:.2f}'.format(amount)
